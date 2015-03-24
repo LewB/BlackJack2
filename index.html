@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <h1><img src="assets/jack_128.png" width=60 height=80 class="hdrImage">
+  &emsp;BLACKJACK&ensp;<span class="b1">in Javascript</span></h1>
+  <script src="cardfaces.js"></script>
+  <script src="blackjack2.js"></script>
+  <script src="setitup.js"></script>
+</head>
+<body>
+  <div>
+    <strong>Select Number of Players: </strong>
+    <input type="number" min="1" max="5" value="1" id="numPlayers">
+    <button type="button" id="startBtn" class="stdBtn">Start</button>
+    <br>
+  </div>
+  <br>
+  <div id="top">
+  </div>
+  <div id="Dealer">
+  </div>
+    <br>
+  <div id="Jackers">
+  </div>
+  <script src="main.js"></script>
+  <div>
+    <dialog id="betget">
+      <div class="dlgHdr">&emsp;BLACKJACK - PLACE BET
+      <a id="popclose" title="Close" class="close">X</a>
+      </div><br>
+      <p>Player:&ensp;<b><span id="plynm">PLAYER</span></b>&ensp;Place Your Bet
+      <br><br>
+      <b>Amount: $</b>
+      <input type="text" id="retval" value="" placeholder="50" autofocus>
+      </p><br>
+      <button id="BetOkBtn" class="dlgBtn">OK</button>
+    </dialog>
+  </div>
+  <div>
+    <dialog id="nameget">
+      <div class="dlgHdr">&emsp;BLACKJACK - CHANGE NAME
+      <a id="nameclose" title="Close" class="close">X</a>
+      </div><br>
+      <p><br><b>New Name:</b>
+      <input type="text" id="chgname" value="" placeholder="Enter Name" autofocus>
+      </p><br>
+      <button id="NameOkBtn" class="dlgBtn">OK</button>
+    </dialog>
+  </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Blackjack 2",
+  "short_name": "BJ2",
+  "description": "Blackjack as Test of Google-Apps",
+  "version": "0.0.2.0",
+  "offline_enabled": true,
+  "icons": {
+    "16": "assets/jack_16.png",
+    "128": "assets/jack_128.png"
+  },
+
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  }
+}
