@@ -1,0 +1,16 @@
+{
+  "name": "blackjack2",
+  "version": "1.0.0",
+  "description": "An Experimental Electron Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lewb/BlackJack2.git"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^0.36.3"
+  }
+}

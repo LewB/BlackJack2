@@ -1,4 +1,4 @@
- // SET UP FUNCTION CALLED BY main.js
+ // SET UP FUNCTION CALLED BY index.html in <body>
 function setitup() {
 	// SETUP THE CARD DECK
 	setupdeck();
