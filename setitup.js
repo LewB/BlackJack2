@@ -59,17 +59,18 @@ function setdealer() {
 	G_Dealer.hands[0].msg = "dlrtxt";
 	// SET UP DEALER DOM DIV IN DYNAMIC HTML
 	document.getElementById("Dealer").className = "dlr";
-	hstr = "<p><b>DEALER</b></p><p>\n";
+	hstr = "<p><b>DEALER</b>\n";
+	hstr = hstr + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
+	hstr = hstr + "<b>BANK:&nbsp;$<span id=\x22dlrbank\x22>0</span></b><br><br>\n";
 	for (i = 0; i < 10; i++) {
 		tnm = "DC" + (i+1);
 		hstr = hstr + "<img id=\x22" + tnm + "\x22 src=\x22\x22 width=60 height=80>\n";
 		G_Dealer.hands[0].slots[i] = tnm;
 	}
-	hstr = hstr + "<br><textarea id=\x22" + G_Dealer.hands[0].msg + "\x22 READONLY name=dealtxt rows=\x223\x22 cols=\x2250\x22></textarea>\n";
-	hstr = hstr + "<b>&emsp;BANK:</b>  $<span id=\x22dlrbank\x22>0</span><br>\n";
-	hstr = hstr + "<button type=\x22button\x22 id=\x22bets\x22 class=\x22stdBtn\x22>Place Bets</button>\n";
-	hstr = hstr + "<br></p>\n";
+	hstr = hstr + "<br><textarea id=\x22" + G_Dealer.hands[0].msg + "\x22 READONLY name=dealtxt rows=\x223\x22 cols=\x2250\x22></textarea><br>\n";
+	hstr = hstr + "<button type=\x22button\x22 id=\x22bets\x22 class=\x22stdBtn\x22>Place Bets</button><\p>\n";
 	document.getElementById("Dealer").innerHTML = hstr;
+	
 	// SET PLACE BETS BUTTON LISTENER
 	document.getElementById("bets").addEventListener("click", function(e) {
     e.preventDefault();
@@ -103,20 +104,24 @@ function setplayers() {
 		tnm = "Player" + (i+1);
 		var plyr = new Player(tnm);		// NEW PLAYER OBJECT
 		plyr.bank = 500;
-		var phnd = new Hand();			// NEW PLAYER HAND OBJECT
 		plyr.divid = "pdiv" + (i+1);	// NEW PLAYER HTML DIV
 		// CREATE DYNAMIC HTML PLAYER DIV
 		hstr = hstr + "<div id=\x22" + plyr.divid + "\x22 class=\x22dlr\x22>\n";
-		hstr = hstr + "<p><a id=\x22pname" + i + "\x22 title=\x22Change Name\x22 class=\x22stdBtn\x22>" + tnm + "</a>";
+		hstr = hstr + "<p><a id=\x22pname" + i + "\x22 title=\x22Change Name\x22 class=\x22stdBtn\x22>" + tnm + "</a>\n";
+		hstr = hstr + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
+		hstr = hstr + "<b>&emsp;BANK:</b>  $<span id=\x22plrbank" + i + "\x22>500</span><br>\n";
 		hstr = hstr + "<br><br>\n";
+		// CREATE PLAYER HANDS
+		var phnd = new Hand();			// NEW PLAYER HAND OBJECT
+		phnd.divid = "phdiv" + (i+1);	// DEFINE HAND DOM ID
+		hstr = hstr + "<div id=\x22" + phnd.divid + "\x22 class=\x22hnd\x22>\n";
 		for (j = 0; j < 10; j++) {
 			phnd.slots[j] = "P" + (i+1) + (j+1);	// DEFINE SLOT DOM IDS
 			hstr = hstr + "<img id=\x22" + phnd.slots[j] + "\x22 src=\x22\x22 width=60 height=80>\n";
 		}
 		hstr = hstr + "<br>\n";
 		phnd.msg = "plrtxt" + (i+1);	// DEFINE DOM PLAYER MSG TEXTAREA
-		hstr = hstr + "<textarea id=\x22" + phnd.msg + "\x22 READONLY rows=\x223\x22 cols=\x2250\x22></textarea>\n";
-		hstr = hstr + "<b>&emsp;BANK:</b>  $<span id=\x22plrbank" + i + "\x22>500</span><br>\n";
+		hstr = hstr + "<textarea id=\x22" + phnd.msg + "\x22 READONLY rows=\x223\x22 cols=\x2250\x22></textarea><br>\n";
 		phnd.fdbtn = "fold" + (i+1);	// DEFINE DOM PLAYER SURRENDER (FOLD) BUTTON
 		hstr = hstr + "<button type=\x22button\x22 id=\x22" + phnd.fdbtn + "\x22 class=\x22stdBtn\x22>Surrender</button>\n";
 		phnd.btbtn = "dblbet" + (i+1);	// DEFINE DOM PLAYER BET BUTTON
@@ -124,14 +129,18 @@ function setplayers() {
 		phnd.stbtn = "stay" + (i+1);	// DEFINE DOM PLAYER STICK BUTTON
 		hstr = hstr + "<button type=\x22button\x22 id=\x22" + phnd.stbtn + "\x22 class=\x22stdBtn\x22>Stick</button>\n";
 		phnd.htbtn = "hit" + (i+1);		// DEFINE DOM PLAYER HIT BUTTON
-		hstr = hstr + "<button type=\x22button\x22 id=\x22" + phnd.htbtn + "\x22 class=\x22stdBtn\x22>Hit Me</button><br></p>\n";
-		hstr = hstr + "</div><br>";
+		hstr = hstr + "<button type=\x22button\x22 id=\x22" + phnd.htbtn + "\x22 class=\x22stdBtn\x22>Hit Me</button>\n";
+		phnd.spbtn = "split" + (i+1);	// DEFINE DOM PLAYER SPLIT BUTTON
+		hstr = hstr + "<button type=\x22button\x22 id=\x22" + phnd.spbtn + "\x22 class=\x22stdBtn\x22>Split Hand</button><br></p>\n";
+		hstr = hstr + "</div></div>";
 		// PUSH PLAYER AND HAND OBJECTS INTO RESPECTIVE ARRAYS
 		plyr.hands.push(phnd);
+		
 		G_Players.push(plyr);
 	}
 	// SET THE DOM DIVs DYNAMIC HTML
 	document.getElementById("Jackers").innerHTML = hstr;
+	
 	//ADD BUTTON CLICK LISTENERS FOR EACH PLAYER
 	var btnid;
 	for (i = 0; i < pcnt; i++) {
@@ -178,6 +187,15 @@ function setplayers() {
         hitem(plyr);
       });
       document.getElementById(btnid).disabled = true;
+		// SPLIT BUTTON
+	    btnid = G_Players[i].hands[0].spbtn;
+      document.getElementById(btnid).value = i;
+      document.getElementById(btnid).addEventListener("click", function(e) {
+        e.preventDefault();
+        plyr = e.target.value;
+        splitem(plyr);
+      });
+      document.getElementById(btnid).disabled = true;
 	}
 }
 
@@ -189,9 +207,13 @@ function clearall() {
   }
   // DELETE PLAYER AND HAND OBJECTS
   if (G_Players) {
-    for (var i = 0; i < G_Players.length; i++) {
-      G_Players[i].hands[0].clear();
-      delete G_Players[i].hands[0];
+	  var i = 0;
+	  var j = 0;
+    for (i = 0; i < G_Players.length; i++) {
+		for (j = 0; j < G_Players[i].hands.length; j++) {
+			G_Players[i].hands[j].clear();
+			delete G_Players[i].hands[j];
+		}
       delete G_Players[i];
     }
   }

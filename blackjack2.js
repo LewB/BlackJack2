@@ -18,17 +18,19 @@ function Card() {
 // THE HAND OBJECT
 function Hand() {
 	// PROPERTIES
-	this.nxtcard = 0;			// THE NEXT OPEN SLOT
-	this.handtot = 0;			// THE POINT TOTAL FOR THE HAND
-	this.slots = [];			// CARD SLOT DOM IDS (10)
-	this.cards = [];			// THE CARDS IN THE HAND
-	this.fdbtn = "";			// THE SURRENDER BUTTON DOM ID
-	this.btbtn = "";			// THE DOUBLE DOWN BUTTON DOM ID
-	this.htbtn = "";			// THE HIT BUTTON DOM ID
-	this.stbtn = "";			// THE STICK BUTTON DOM ID
-	this.msg = "";				// THE TEXTAREA DOM ID
-	this.bet = 0;				  // BET FOR CURRENT HAND
-	this.status = 0;			// 0 = Playing, 1 = Sticking, 2 = Busted, 3 = Blackjack, 4 = Surrender, 5 = Doubled
+	this.divid = "";		// DOM HAND DIV ID
+	this.nxtcard = 0;		// THE NEXT OPEN SLOT
+	this.handtot = 0;		// THE POINT TOTAL FOR THE HAND
+	this.slots = [];		// CARD SLOT DOM IDS (10)
+	this.cards = [];		// THE CARDS IN THE HAND
+	this.fdbtn = "";		// THE SURRENDER BUTTON DOM ID
+	this.btbtn = "";		// THE DOUBLE DOWN BUTTON DOM ID
+	this.htbtn = "";		// THE HIT BUTTON DOM ID
+	this.stbtn = "";		// THE STICK BUTTON DOM ID
+	this.spbtn = "";		// THE SPLIT HAND BUTTON DOM ID
+	this.msg = "";			// THE TEXTAREA DOM ID
+	this.bet = 0;			// BET FOR CURRENT HAND
+	this.status = 0;		// 0 = Playing, 1 = Sticking, 2 = Busted, 3 = Blackjack, 4 = Surrender, 5 = Doubled
 }
 // HAND OBJECT METHODS
 // clear method
@@ -41,6 +43,7 @@ Hand.prototype.clear = function() {
 	}
 	this.nxtcard = 0;
 	this.cards = [];
+	//document.getElementById(this.divid).InnerHTML = "";
 }
 // sayit method
 Hand.prototype.sayit = function(what) {
@@ -163,7 +166,9 @@ function dealem(){
 	GDH.clear();
 	// CLEAR PLAYER SLOTS
 	for (i = 0; i < G_Players.length; i++) {
-		G_Players[i].hands[0].clear();
+		for (j = 0; j < G_Players[i].hands.length; j++) {
+			G_Players[i].hands[j].clear();
+		}
 	}
 	// DEAL LOGIC GOES HERE //
 	// First 2 Cards to Dealer
@@ -179,7 +184,6 @@ function dealem(){
 		GDH.handtot -= 10;
 	}
 	// Deal Players 2 Cards
-
 	for (i = 0; i < G_Players.length; i++) {			// Main Player Loop
 	  GPH = G_Players[i].hands[0];
 		if (G_Players[i].acthand >= 0) {				// Deal to Active Players Only
@@ -190,11 +194,13 @@ function dealem(){
 				GPH.sayit("*** B L A C K J A C K ! ***");
 				GPH.status = 3;				// STICK
 			}
+			if (GPH.cards[0].name == GPH.cards[1].name) {
+				// SPLIT HANDS
+				
+			}
 			if (GPH.handtot == 22) {		// Got 2 Aces
 				GPH.cards[0].value = 1;		// Make one Ace a value of 1
 				GPH.handtot -= 10;			// Do this or split into two hands
-				// document.getElementById("stay").textContent = "Split";
-				// SPLIT HANDS NOT IMPLEMENTED YET
 			}
 		}
 		// SET BUTTONS AND BORDER
@@ -202,6 +208,7 @@ function dealem(){
 		document.getElementById(GPH.btbtn).disabled = true;				// DISABLE DOUBLE BUTTON
 		document.getElementById(GPH.stbtn).disabled = true;				// DISABLE STICK BUTTON
 		document.getElementById(GPH.htbtn).disabled = true;				// DISABLE HIT BUTTON
+		document.getElementById(GPH.spbtn).disabled = true;				// DISABLE SPLIT BUTTON
 		document.getElementById(G_Players[i].divid).className = "dlr";	// SET BORDER TO NONE
 	}
 	// TO SET INITIAL NEXT PLAYER TO START CHECK AT INDEX ZERO
@@ -412,6 +419,18 @@ function hitem(cplr) {
 	document.getElementById(GPH.fdbtn).disabled = true;		// DISABLE SURRENDER BUTTON
 	document.getElementById(GPH.btbtn).disabled = true;		// DISABLE DOUBLE BUTTON
 	if (GPH.status > 0) {
+		set_next_player();
+	}
+}
+// BUTTON FUNCTION splitem()
+function splitem(cplr){
+	// CALLBACK FOR PLAYER SURRENDER BUTTON DYNAMIC HTML:
+	// <button type="button" id="stayX onclick="splitem(X)">Split Hand</button>
+	// Where: X = The Player Number (dynamically generated in setitup() function)
+	if (cplr < G_Players.length) {
+		var GPH = G_Players[cplr].hands[0];
+		GPH.status = 1;
+		GPH.sayit(G_Players[cplr].name + " Sticks.");
 		set_next_player();
 	}
 }
